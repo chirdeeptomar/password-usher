@@ -4,15 +4,11 @@ using System.Data.Linq;
 using System.Collections.Generic;
 using Dapper;
 using DapperExtensions;
-namespace PasswordUsher.Core
+
+namespace PasswordUsher.Core.Data
 {
 	public abstract class BaseDataAccess<T> where T : class
-	{
-		public BaseDataAccess ()
-		{
-			
-		}
-		
+	{		
 		public virtual IEnumerable<T> GetAll ()
 		{
 			var connection = SqlHelper.GetConnection ();
