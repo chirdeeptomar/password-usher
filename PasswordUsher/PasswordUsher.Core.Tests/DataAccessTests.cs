@@ -21,10 +21,10 @@ namespace PasswordUsher.Core.Tests
 	    public void can_get_all_service_records()
 		{
 			var providers = providerData.GetAll();			
-			Assert.Greater(0, providers.Count());
+			Assert.Greater(providers.Count(), 0);
 		}
 		
-		[Ignore]
+		[Test]
 	    public void can_get_a_service_record()
 		{
 			var provider = providerData.Get(1);

@@ -7,44 +7,46 @@ using DapperExtensions;
 
 namespace PasswordUsher.Core.Data
 {
-	public abstract class BaseDataAccess<T> where T : class
+	public abstract class BaseDataAccess<TEntity> where TEntity : class
 	{		
-		public virtual IEnumerable<T> GetAll ()
+		public virtual IEnumerable<TEntity> GetAll ()
 		{
-			var connection = SqlHelper.GetConnection ();
-			
-			var result = connection.GetList<T> ().ToList();			
-			connection.Close ();
-			return result;			
+			using(var connection = SqlHelper.GetConnection ())
+			{			
+				return connection.GetList<TEntity> ().ToList();					
+			}
 		}
 		
-		public virtual T Get (int id)
+		public virtual TEntity Get (int id)
 		{
-			var connection = SqlHelper.GetConnection ();
-			T record = connection.Get<T> (id);
-			connection.Close();
-			return record;			
+			using(var connection = SqlHelper.GetConnection ())
+			{
+				return connection.Get<TEntity> (id);		
+			}
 		}
 		
-		public virtual void Insert (T entity)
+		public virtual void Insert (TEntity entity)
 		{
-			var connection = SqlHelper.GetConnection();
-			connection.Insert<T> (entity);
-			connection.Close();
+			using(var connection = SqlHelper.GetConnection())
+			{
+				connection.Insert<TEntity>(entity);
+			}
 		}
 		
-		public virtual void Update (T entity)
+		public virtual void Update (TEntity entity)
 		{
-			var connection = SqlHelper.GetConnection();
-			connection.Update<T> (entity);
-			connection.Close();
+			using(var connection = SqlHelper.GetConnection())
+			{
+				connection.Update<TEntity>(entity);
+			}			
 		}
 		
-		public virtual void Delete (T entity)
+		public virtual void Delete (TEntity entity)
 		{
-			var connection = SqlHelper.GetConnection();
-			connection.Delete<T> (entity);
-			connection.Close();
+			using(var connection = SqlHelper.GetConnection())
+			{
+				connection.Delete<TEntity>(entity);
+			}
 		}
 	}
 }
