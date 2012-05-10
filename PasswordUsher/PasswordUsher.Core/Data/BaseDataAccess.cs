@@ -17,34 +17,16 @@ namespace PasswordUsher.Core.Data
 			}
 		}
 		
-		public virtual TEntity Get (int id)
+		public virtual TEntity Get (Int64 id)
 		{
 			using (var connection = SqlHelper.GetConnection ()) {
 				return connection.Get<TEntity> (id);		
 			}
 		}
 		
-		public virtual bool Insert (TEntity entity)
-		{			
-			try {
-				var connection = SqlHelper.GetConnection ();			
-				connection.Insert<TEntity> (entity);
-				connection.Close ();	
-				return true;
-				} 
-			catch (Exception ex) {
-				Debug.WriteLine(ex.Message);
-				Debug.WriteLine(ex.StackTrace);			
-				return false;
-			}			
-		}
+		public abstract bool Insert (TEntity entity);		
 		
-		public virtual void Update (TEntity entity)
-		{
-			using (var connection = SqlHelper.GetConnection()) {
-				connection.Update<TEntity> (entity);
-			}			
-		}
+		public abstract bool Update (TEntity entity);		
 		
 		public virtual void Delete (TEntity entity)
 		{

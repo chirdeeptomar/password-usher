@@ -13,15 +13,26 @@ namespace PasswordUsher.Core.Data
 		{
 			try {
 				using (var connection = SqlHelper.GetConnection ()) {			
-					connection.Execute (@"insert into Providers values(null, @name)", new {name = entity.Name});	
-					dynamic collection = connection.Query ("select last_insert_rowid()").FirstOrDefault ();				
+					connection.Execute (@"insert into Providers values(null, @name)", new {name = entity.Name});							
 				}	
 				return true;
 				
 			} catch (Exception ex) {
-				return false;
+				throw ex;
 			}				
 		}
+		
+		public override bool Update (Provider entity)
+		{
+			try {
+				using (var connection = SqlHelper.GetConnection()) {
+					connection.Execute (@"update Providers set Name = @Name where Id = @id;", new { name= entity.Name, id = entity.Id });
+				}	
+				return true;
+			} catch (Exception ex) {
+				throw ex;
+			}						
+		}		
 	}
 }
 

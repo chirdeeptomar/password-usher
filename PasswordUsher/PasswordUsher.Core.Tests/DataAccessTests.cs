@@ -32,5 +32,25 @@ namespace PasswordUsher.Core.Tests
 			bool operation  = providerData.Insert(provider);			
 			Assert.IsTrue(operation);
 		}
+		
+		[Test]
+	    public void can_update_a_service_record()			
+		{
+			var providers = providerData.GetAll();
+			var provider = providers.FirstOrDefault();
+			provider.Name = "Google";
+			bool operation  = providerData.Update(provider);			
+			Assert.IsTrue(operation);
+		}
+		
+		[Test]
+	    public void can_delete_a_service_record()			
+		{
+			var providers = providerData.GetAll();
+			var provider = providers.FirstOrDefault();			
+			providerData.Delete(provider);						
+			Provider p = providerData.Get (provider.Id);
+			Assert.IsNull(p);
+		}
 	}
 }
