@@ -1,12 +1,12 @@
 ﻿using System.Configuration;
 using System.Data;
-using DapperExtensions.Mapper;
 using Mono.Data.Sqlite;
+using DapperExtensions.Mapper;
 using System.Diagnostics;
 
 namespace PasswordUsher.Core
 {	
-	internal static class SqlHelper
+	public static class SqlHelper
 	{
 		private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings ["ConnectionString"].ConnectionString;
 		private static IDbConnection connection;

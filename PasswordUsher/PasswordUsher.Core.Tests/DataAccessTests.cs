@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using PasswordUsher.Core;
 using NUnit.Framework;
+using PasswordUsher.Core;
 using PasswordUsher.Core.Data;
 using PasswordUsher.Domain.Entities;
 
@@ -22,23 +22,15 @@ namespace PasswordUsher.Core.Tests
 		{
 			var providers = providerData.GetAll();			
 			Assert.Greater(providers.Count(), 0);
-		}
+		}	
 		
 		[Test]
-	    public void can_get_a_service_record()
+	    public void can_add_a_service_record()			
 		{
-			var provider = providerData.Get(1);
-			Assert.AreEqual(1, provider.Id);
-			Assert.AreEqual("Google", provider.Name);
-		}
-		
-		[Ignore]
-	    public void can_add_a_service_record()
-		{
-			var provider = new Provider { Name = "Google" };
-			providerData.Insert(provider);			
-			Assert.AreEqual("Google", providerData.Get(1).Name);
+			Guid guid = Guid.NewGuid();
+			var provider = new Provider { Name = "Test" + guid  };
+			bool operation  = providerData.Insert(provider);			
+			Assert.IsTrue(operation);
 		}
 	}
 }
-
