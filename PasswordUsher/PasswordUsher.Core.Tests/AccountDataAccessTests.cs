@@ -49,6 +49,13 @@ namespace PasswordUsher.Core.Tests
 			accountData.Delete(account);
 			Assert.IsNull(accountData.Get(account.Id));
 		}
+		
+		[Test]
+		public void can_get_by_provider()
+		{
+			var accounts = accountData.GetByProvider(14);
+			Assert.AreEqual(1, accounts.Count());
+		}
 	}
 }
 

@@ -1,16 +1,24 @@
 using System;
+using System.Linq;
 using Dapper;
 using PasswordUsher.Core.Data;
 using PasswordUsher.Domain.Entities;
+using System.Collections.Generic;
+using DapperExtensions;
 
 namespace PasswordUsher.Core
 {
 	public class AccountDataAccess : BaseDataAccess<Account>
 	{
-		public AccountDataAccess ()
+		public IEnumerable<Account> GetByProvider(Int64 id)
 		{
+			using (var connection = SqlHelper.GetConnection ()) 
+			{	
+				var predicate = Predicates.Field<Account>(f => f.ProviderId, Operator.Eq, id);
+    			return connection.GetList<Account>(predicate).ToList();
+			}
 		}
-
+		
 		#region implemented abstract members of PasswordUsher.Core.Data.BaseDataAccess[Account]
 		public override bool Insert (Account entity)
 		{
