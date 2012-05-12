@@ -9,6 +9,7 @@ namespace PasswordUsher.Core.Data
 {
 	public class ProviderDataAccess : BaseDataAccess<Provider>
 	{	
+		#region implemented abstract members of PasswordUsher.Core.Data.BaseDataAccess[Provider]
 		public override bool Insert (Provider entity)
 		{
 			try {
@@ -32,7 +33,8 @@ namespace PasswordUsher.Core.Data
 			} catch (Exception ex) {
 				throw ex;
 			}						
-		}		
+		}	
+		#endregion	
 	}
 }
 
