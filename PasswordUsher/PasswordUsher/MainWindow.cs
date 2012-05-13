@@ -96,9 +96,9 @@ public partial class MainWindow: Gtk.Window
 		
 	protected void AddProvider (object sender, System.EventArgs e)
 	{
-//		AddProviderWindow providerWindow = new AddProviderWindow();
-//		providerWindow.Show();
-//		Initialise();
+		AddProviderWindow providerWindow = new AddProviderWindow();
+		providerWindow.Show();
+		Initialise();
 	}	
 	
 

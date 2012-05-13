@@ -395,5 +395,56 @@
         </child>
       </widget>
     </child>
-  </widget>  
+  </widget>
+  <widget class="Gtk.Window" id="PasswordUsher.AddProviderWindow" design-size="374 173">
+    <property name="MemberName" />
+    <property name="Title" translatable="yes">Add Provider</property>
+    <property name="TypeHint">Dialog</property>
+    <property name="WindowPosition">Center</property>
+    <property name="Gravity">Center</property>
+    <child>
+      <widget class="Gtk.Fixed" id="fixed3">
+        <property name="MemberName" />
+        <property name="HasWindow">False</property>
+        <child>
+          <widget class="Gtk.Label" id="LabelProvider">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Provider:</property>
+          </widget>
+          <packing>
+            <property name="X">49</property>
+            <property name="Y">26</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Button" id="ButtonSaveProvider">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">Save Provider</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="SaveProvider" />
+          </widget>
+          <packing>
+            <property name="X">134</property>
+            <property name="Y">84</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Entry" id="EntryProvider">
+            <property name="MemberName" />
+            <property name="WidthRequest">200</property>
+            <property name="CanFocus">True</property>
+            <property name="IsEditable">True</property>
+            <property name="InvisibleChar">•</property>
+            <signal name="TextInserted" handler="EnableSave" />
+          </widget>
+          <packing>
+            <property name="X">119</property>
+            <property name="Y">23</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
 </stetic-interface>

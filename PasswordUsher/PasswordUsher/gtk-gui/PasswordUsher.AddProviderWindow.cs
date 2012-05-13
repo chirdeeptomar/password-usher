@@ -4,56 +4,62 @@ namespace PasswordUsher
 {
 	public partial class AddProviderWindow
 	{
-		private global::Gtk.Button buttonCancel;
-		private global::Gtk.Button buttonOk;
+		private global::Gtk.Fixed fixed3;
+		private global::Gtk.Label LabelProvider;
+		private global::Gtk.Button ButtonSaveProvider;
+		private global::Gtk.Entry EntryProvider;
 		
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
 			// Widget PasswordUsher.AddProviderWindow
 			this.Name = "PasswordUsher.AddProviderWindow";
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
-			// Internal child PasswordUsher.AddProviderWindow.VBox
-			global::Gtk.VBox w1 = this.VBox;
-			w1.Name = "dialog1_VBox";
-			w1.BorderWidth = ((uint)(2));
-			// Internal child PasswordUsher.AddProviderWindow.ActionArea
-			global::Gtk.HButtonBox w2 = this.ActionArea;
-			w2.Name = "dialog1_ActionArea";
-			w2.Spacing = 10;
-			w2.BorderWidth = ((uint)(5));
-			w2.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
-			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonCancel = new global::Gtk.Button ();
-			this.buttonCancel.CanDefault = true;
-			this.buttonCancel.CanFocus = true;
-			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.UseStock = true;
-			this.buttonCancel.UseUnderline = true;
-			this.buttonCancel.Label = "gtk-cancel";
-			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w3 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w2 [this.buttonCancel]));
-			w3.Expand = false;
-			w3.Fill = false;
-			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-			this.buttonOk = new global::Gtk.Button ();
-			this.buttonOk.CanDefault = true;
-			this.buttonOk.CanFocus = true;
-			this.buttonOk.Name = "buttonOk";
-			this.buttonOk.UseStock = true;
-			this.buttonOk.UseUnderline = true;
-			this.buttonOk.Label = "gtk-ok";
-			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w4 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w2 [this.buttonOk]));
-			w4.Position = 1;
-			w4.Expand = false;
-			w4.Fill = false;
+			this.Title = global::Mono.Unix.Catalog.GetString ("Add Provider");
+			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
+			this.WindowPosition = ((global::Gtk.WindowPosition)(1));
+			this.Gravity = ((global::Gdk.Gravity)(5));
+			// Container child PasswordUsher.AddProviderWindow.Gtk.Container+ContainerChild
+			this.fixed3 = new global::Gtk.Fixed ();
+			this.fixed3.Name = "fixed3";
+			this.fixed3.HasWindow = false;
+			// Container child fixed3.Gtk.Fixed+FixedChild
+			this.LabelProvider = new global::Gtk.Label ();
+			this.LabelProvider.Name = "LabelProvider";
+			this.LabelProvider.LabelProp = global::Mono.Unix.Catalog.GetString ("Provider:");
+			this.fixed3.Add (this.LabelProvider);
+			global::Gtk.Fixed.FixedChild w1 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.LabelProvider]));
+			w1.X = 49;
+			w1.Y = 26;
+			// Container child fixed3.Gtk.Fixed+FixedChild
+			this.ButtonSaveProvider = new global::Gtk.Button ();
+			this.ButtonSaveProvider.CanFocus = true;
+			this.ButtonSaveProvider.Name = "ButtonSaveProvider";
+			this.ButtonSaveProvider.UseUnderline = true;
+			this.ButtonSaveProvider.Label = global::Mono.Unix.Catalog.GetString ("Save Provider");
+			this.fixed3.Add (this.ButtonSaveProvider);
+			global::Gtk.Fixed.FixedChild w2 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.ButtonSaveProvider]));
+			w2.X = 134;
+			w2.Y = 84;
+			// Container child fixed3.Gtk.Fixed+FixedChild
+			this.EntryProvider = new global::Gtk.Entry ();
+			this.EntryProvider.WidthRequest = 200;
+			this.EntryProvider.CanFocus = true;
+			this.EntryProvider.Name = "EntryProvider";
+			this.EntryProvider.IsEditable = true;
+			this.EntryProvider.InvisibleChar = '•';
+			this.fixed3.Add (this.EntryProvider);
+			global::Gtk.Fixed.FixedChild w3 = ((global::Gtk.Fixed.FixedChild)(this.fixed3 [this.EntryProvider]));
+			w3.X = 119;
+			w3.Y = 23;
+			this.Add (this.fixed3);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 400;
-			this.DefaultHeight = 300;
+			this.DefaultWidth = 374;
+			this.DefaultHeight = 173;
 			this.Show ();
+			this.ButtonSaveProvider.Clicked += new global::System.EventHandler (this.SaveProvider);
+			this.EntryProvider.TextInserted += new global::Gtk.TextInsertedHandler (this.EnableSave);
 		}
 	}
 }
