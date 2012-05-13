@@ -65,7 +65,8 @@ public partial class MainWindow
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("Password Manager");
-		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+		this.WindowPosition = ((global::Gtk.WindowPosition)(1));
+		this.Gravity = ((global::Gdk.Gravity)(5));
 		// Container child MainWindow.Gtk.Container+ContainerChild
 		this.vbox1 = new global::Gtk.VBox ();
 		this.vbox1.Name = "vbox1";
@@ -268,6 +269,8 @@ public partial class MainWindow
 		this.DefaultHeight = 452;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+		this.newAction.Activated += new global::System.EventHandler (this.AddProvider);
 		this.dialogInfoAction.Activated += new global::System.EventHandler (this.OnAbout);
+		this.quitAction.Activated += new global::System.EventHandler (this.ApplicationQuit);
 	}
 }

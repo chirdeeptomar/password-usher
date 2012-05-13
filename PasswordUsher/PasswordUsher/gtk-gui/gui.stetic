@@ -35,6 +35,7 @@
         <property name="Label" translatable="yes" />
         <property name="StockId">gtk-new</property>
         <property name="Tooltip" translatable="yes">New Provider</property>
+        <signal name="Activated" handler="AddProvider" />
       </action>
       <action id="newAction1">
         <property name="Type">Action</property>
@@ -61,11 +62,13 @@
         <property name="Label" translatable="yes">_Quit</property>
         <property name="ShortLabel" translatable="yes">_Quit</property>
         <property name="StockId">gtk-quit</property>
+        <signal name="Activated" handler="ApplicationQuit" />
       </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Password Manager</property>
-    <property name="WindowPosition">CenterOnParent</property>
+    <property name="WindowPosition">Center</property>
+    <property name="Gravity">Center</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <widget class="Gtk.VBox" id="vbox1">
@@ -392,5 +395,5 @@
         </child>
       </widget>
     </child>
-  </widget>
+  </widget>  
 </stetic-interface>

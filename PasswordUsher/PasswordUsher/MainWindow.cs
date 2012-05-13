@@ -16,37 +16,39 @@ public partial class MainWindow: Gtk.Window
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{	
 		Build ();		
-		Initialise();
-		BindProviderTree ();
-		BindProviderCombobox ();	
-		
+		Initialise();	
+		CreateTreeViewUi ();
 	}
 	
 	#region Initialisation
 
 	public void Initialise ()
 	{				
-		Providers = providerData.GetAll();			
+		Providers = providerData.GetAll();
+		BindProviderTree ();
+		BindProviderCombobox ();			
 	}
 
 	#endregion
 	
 	#region Control Bindings
 
-	public void BindProviderTree ()
+	void CreateTreeViewUi ()
 	{
 		Gtk.TreeViewColumn accountColumn = new Gtk.TreeViewColumn ();
 		accountColumn.Title = "Accounts";
- 
+		
 		Gtk.CellRendererText accountNameCell = new Gtk.CellRendererText ();
- 
+		
 		accountColumn.PackStart (accountNameCell, true);
- 
- 		TreeviewAccounts.AppendColumn (accountColumn);
 		
- 
-		accountColumn.AddAttribute (accountNameCell, "text", 0);		
+		TreeviewAccounts.AppendColumn (accountColumn);		
 		
+		accountColumn.AddAttribute (accountNameCell, "text", 0);
+	}
+
+	public void BindProviderTree ()
+	{	
 		TreeStore accountStore = new TreeStore (typeof (string));
 		
 		foreach (var provider in Providers) 
@@ -91,6 +93,19 @@ public partial class MainWindow: Gtk.Window
 		dialog.Run ();
 		dialog.Destroy ();
 	}	
+		
+	protected void AddProvider (object sender, System.EventArgs e)
+	{
+//		AddProviderWindow providerWindow = new AddProviderWindow();
+//		providerWindow.Show();
+//		Initialise();
+	}	
+	
+
+	protected void ApplicationQuit (object sender, System.EventArgs e)
+	{
+		Application.Quit();
+	}
 	
 	#endregion
 }
