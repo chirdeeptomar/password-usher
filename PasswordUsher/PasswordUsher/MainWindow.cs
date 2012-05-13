@@ -13,11 +13,16 @@ public partial class MainWindow: Gtk.Window
 	ProviderDataAccess providerData = new ProviderDataAccess ();
 	AccountDataAccess accountData = new AccountDataAccess ();
 	
+	public delegate void ProviderAddedDelegate();
+
+	public event ProviderAddedDelegate ProviderAddedEvent;
+		
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{	
 		Build ();		
 		Initialise();	
 		CreateTreeViewUi ();
+		ProviderAddedEvent += new ProviderAddedDelegate(Initialise);
 	}
 	
 	#region Initialisation
@@ -96,9 +101,8 @@ public partial class MainWindow: Gtk.Window
 		
 	protected void AddProvider (object sender, System.EventArgs e)
 	{
-		AddProviderWindow providerWindow = new AddProviderWindow();
-		providerWindow.Show();
-		Initialise();
+		AddProviderWindow providerWindow = new AddProviderWindow(ProviderAddedEvent);
+		providerWindow.Show();		
 	}	
 	
 

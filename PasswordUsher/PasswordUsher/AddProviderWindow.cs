@@ -8,10 +8,12 @@ namespace PasswordUsher
 	public partial class AddProviderWindow : Gtk.Window
 	{
 		ProviderDataAccess providerData;
-		
-		public AddProviderWindow () : base(Gtk.WindowType.Toplevel)
+		public event MainWindow.ProviderAddedDelegate ProviderAddedEvent;
+						
+		public AddProviderWindow (MainWindow.ProviderAddedDelegate providerAddedEvent) : base(Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
+			ProviderAddedEvent = providerAddedEvent;
 			providerData = new ProviderDataAccess();
 		}				
 
@@ -24,7 +26,12 @@ namespace PasswordUsher
 		{
 		
 			try {
-				providerData.Insert(new Provider{ Name = EntryProvider.Text.Trim() });	
+				providerData.Insert(new Provider{ Name = EntryProvider.Text.Trim() });
+				if (ProviderAddedEvent!=null) 
+				{
+					ProviderAddedEvent();
+				}
+						
 				this.Destroy();				
 			} catch (Exception ex) {				
 				MessageDialog dialog = new MessageDialog (this, DialogFlags.Modal, MessageType.Error, ButtonsType.Cancel, ex.Message); 				
