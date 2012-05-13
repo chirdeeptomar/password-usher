@@ -32,6 +32,7 @@ namespace PasswordUsher
 			w1.Y = 26;
 			// Container child fixed3.Gtk.Fixed+FixedChild
 			this.ButtonSaveProvider = new global::Gtk.Button ();
+			this.ButtonSaveProvider.Sensitive = false;
 			this.ButtonSaveProvider.CanFocus = true;
 			this.ButtonSaveProvider.Name = "ButtonSaveProvider";
 			this.ButtonSaveProvider.UseUnderline = true;
@@ -59,7 +60,7 @@ namespace PasswordUsher
 			this.DefaultHeight = 173;
 			this.Show ();
 			this.ButtonSaveProvider.Clicked += new global::System.EventHandler (this.SaveProvider);
-			this.EntryProvider.TextInserted += new global::Gtk.TextInsertedHandler (this.EnableSave);
+			this.EntryProvider.Changed += new global::System.EventHandler (this.EnableSave);
 		}
 	}
 }

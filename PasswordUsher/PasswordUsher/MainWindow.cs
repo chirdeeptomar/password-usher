@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Gtk;
 using PasswordUsher;
@@ -9,6 +10,7 @@ using PasswordUsher.Core;
 public partial class MainWindow: Gtk.Window
 {	
 	IEnumerable<Provider> Providers;	
+	ListStore providerListStore;
 	
 	ProviderDataAccess providerData = new ProviderDataAccess ();
 	AccountDataAccess accountData = new AccountDataAccess ();
@@ -69,10 +71,24 @@ public partial class MainWindow: Gtk.Window
 	}
 
 	void BindProviderCombobox ()
-	{	
+	{		
+		CellRendererText textRenderer = new CellRendererText ();
+
+		providerListStore = new ListStore(typeof(string), typeof(Int64));		
+		ProviderCombobox.Model = providerListStore;
+		
+		//ProviderCombobox.PackStart (textRenderer, false); 
+		ProviderCombobox.AddAttribute (textRenderer, "text", 0);                
+		
 		foreach (var item in Providers) {
-			ProviderCombobox.AppendText (item.Name);
-		}
+			providerListStore.AppendValues(item.Name, item.Id);
+		}		
+		
+		TreeIter iter;
+        if (providerListStore.GetIterFirst (out iter))
+        {
+                ProviderCombobox.SetActiveIter (iter);
+        } 
 	}
 
 	#endregion
@@ -104,12 +120,52 @@ public partial class MainWindow: Gtk.Window
 		AddProviderWindow providerWindow = new AddProviderWindow(ProviderAddedEvent);
 		providerWindow.Show();		
 	}	
-	
 
 	protected void ApplicationQuit (object sender, System.EventArgs e)
 	{
 		Application.Quit();
 	}
 	
+	protected void ResetAccount (object sender, System.EventArgs e)
+	{
+		EntryAccountName.Text = EntryPassword.Text = string.Empty;		 
+	}
+
+	protected void ShowPassword (object sender, System.EventArgs e)
+	{
+		EntryPassword.Visibility =  CheckbuttonShowPassword.Active;		
+	}
+	
+	protected void EnableSaveAndCancel (object sender, System.EventArgs e)
+	{
+		ButtonSave.Sensitive = EntryAccountName.Text.Length > 0 && EntryPassword.Text.Length > 0;
+		ButtonCancel.Sensitive = EntryAccountName.Text.Length > 0 || EntryPassword.Text.Length > 0;
+	}		
+
+	protected void SaveAccount (object sender, System.EventArgs e)
+	{
+		try {
+			TreeIter activeIter;
+			Int64 providerId = 0;
+			if (ProviderCombobox.GetActiveIter (out activeIter)) 
+			{
+				providerId = (Int64)providerListStore.GetValue (activeIter, 1);
+			}
+		
+			var account = new Account{ 
+							Name = EntryAccountName.Text.Trim(),
+							Password = EntryPassword.Text.Trim(),
+							ProviderId = providerId
+							};
+							
+			accountData.Insert(account);
+			ResetAccount(this,null);
+			Initialise();
+		} catch (Exception ex) {
+			MessageDialog dialog = new MessageDialog (this, DialogFlags.Modal, MessageType.Error, ButtonsType.Cancel, ex.Message); 				
+				dialog.Run();
+				dialog.Destroy();
+		}		
+	}
 	#endregion
 }

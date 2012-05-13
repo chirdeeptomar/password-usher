@@ -21,12 +21,12 @@ public partial class MainWindow
 	private global::Gtk.VBox vbox2;
 	private global::Gtk.Table table2;
 	private global::Gtk.CheckButton CheckbuttonShowPassword;
+	private global::Gtk.Entry EntryAccountName;
+	private global::Gtk.Entry EntryPassword;
 	private global::Gtk.Label LabelAccountName;
 	private global::Gtk.Label LabelPassword;
 	private global::Gtk.Label LableProviderCombobox;
 	private global::Gtk.ComboBox ProviderCombobox;
-	private global::Gtk.TextView TextboxAccountName;
-	private global::Gtk.TextView TextboxPassword;
 	private global::Gtk.HBox hbox1;
 	private global::Gtk.Fixed fixed1;
 	private global::Gtk.Button ButtonCancel;
@@ -121,7 +121,6 @@ public partial class MainWindow
 		this.CheckbuttonShowPassword.CanFocus = true;
 		this.CheckbuttonShowPassword.Name = "CheckbuttonShowPassword";
 		this.CheckbuttonShowPassword.Label = global::Mono.Unix.Catalog.GetString ("Show Password");
-		this.CheckbuttonShowPassword.Active = true;
 		this.CheckbuttonShowPassword.DrawIndicator = true;
 		this.CheckbuttonShowPassword.UseUnderline = true;
 		this.table2.Add (this.CheckbuttonShowPassword);
@@ -132,71 +131,72 @@ public partial class MainWindow
 		w6.RightAttach = ((uint)(3));
 		w6.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
+		this.EntryAccountName = new global::Gtk.Entry ();
+		this.EntryAccountName.WidthRequest = 300;
+		this.EntryAccountName.CanFocus = true;
+		this.EntryAccountName.Name = "EntryAccountName";
+		this.EntryAccountName.IsEditable = true;
+		this.EntryAccountName.InvisibleChar = '•';
+		this.table2.Add (this.EntryAccountName);
+		global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.EntryAccountName]));
+		w7.TopAttach = ((uint)(1));
+		w7.BottomAttach = ((uint)(2));
+		w7.LeftAttach = ((uint)(1));
+		w7.RightAttach = ((uint)(2));
+		w7.XOptions = ((global::Gtk.AttachOptions)(4));
+		w7.YOptions = ((global::Gtk.AttachOptions)(4));
+		// Container child table2.Gtk.Table+TableChild
+		this.EntryPassword = new global::Gtk.Entry ();
+		this.EntryPassword.WidthRequest = 300;
+		this.EntryPassword.CanFocus = true;
+		this.EntryPassword.Name = "EntryPassword";
+		this.EntryPassword.IsEditable = true;
+		this.EntryPassword.Visibility = false;
+		this.EntryPassword.InvisibleChar = '•';
+		this.table2.Add (this.EntryPassword);
+		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.EntryPassword]));
+		w8.TopAttach = ((uint)(2));
+		w8.BottomAttach = ((uint)(3));
+		w8.LeftAttach = ((uint)(1));
+		w8.RightAttach = ((uint)(2));
+		w8.XOptions = ((global::Gtk.AttachOptions)(4));
+		w8.YOptions = ((global::Gtk.AttachOptions)(4));
+		// Container child table2.Gtk.Table+TableChild
 		this.LabelAccountName = new global::Gtk.Label ();
 		this.LabelAccountName.Name = "LabelAccountName";
 		this.LabelAccountName.Xalign = 0F;
 		this.LabelAccountName.LabelProp = global::Mono.Unix.Catalog.GetString ("Account Name:");
 		this.table2.Add (this.LabelAccountName);
-		global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.LabelAccountName]));
-		w7.TopAttach = ((uint)(1));
-		w7.BottomAttach = ((uint)(2));
-		w7.XOptions = ((global::Gtk.AttachOptions)(4));
-		w7.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table2 [this.LabelAccountName]));
+		w9.TopAttach = ((uint)(1));
+		w9.BottomAttach = ((uint)(2));
+		w9.XOptions = ((global::Gtk.AttachOptions)(4));
+		w9.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.LabelPassword = new global::Gtk.Label ();
 		this.LabelPassword.Name = "LabelPassword";
 		this.LabelPassword.Xalign = 0F;
 		this.LabelPassword.LabelProp = global::Mono.Unix.Catalog.GetString ("Password:");
 		this.table2.Add (this.LabelPassword);
-		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.LabelPassword]));
-		w8.TopAttach = ((uint)(2));
-		w8.BottomAttach = ((uint)(3));
-		w8.XOptions = ((global::Gtk.AttachOptions)(4));
-		w8.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table2 [this.LabelPassword]));
+		w10.TopAttach = ((uint)(2));
+		w10.BottomAttach = ((uint)(3));
+		w10.XOptions = ((global::Gtk.AttachOptions)(4));
+		w10.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.LableProviderCombobox = new global::Gtk.Label ();
 		this.LableProviderCombobox.Name = "LableProviderCombobox";
 		this.LableProviderCombobox.Xalign = 0F;
 		this.LableProviderCombobox.LabelProp = global::Mono.Unix.Catalog.GetString ("Please select a Provider:");
 		this.table2.Add (this.LableProviderCombobox);
-		global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table2 [this.LableProviderCombobox]));
-		w9.XOptions = ((global::Gtk.AttachOptions)(4));
-		w9.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.table2 [this.LableProviderCombobox]));
+		w11.XOptions = ((global::Gtk.AttachOptions)(4));
+		w11.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.ProviderCombobox = global::Gtk.ComboBox.NewText ();
 		this.ProviderCombobox.Name = "ProviderCombobox";
 		this.table2.Add (this.ProviderCombobox);
-		global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table2 [this.ProviderCombobox]));
-		w10.LeftAttach = ((uint)(1));
-		w10.RightAttach = ((uint)(2));
-		w10.XOptions = ((global::Gtk.AttachOptions)(4));
-		w10.YOptions = ((global::Gtk.AttachOptions)(4));
-		// Container child table2.Gtk.Table+TableChild
-		this.TextboxAccountName = new global::Gtk.TextView ();
-		this.TextboxAccountName.WidthRequest = 300;
-		this.TextboxAccountName.HeightRequest = 25;
-		this.TextboxAccountName.CanFocus = true;
-		this.TextboxAccountName.Name = "TextboxAccountName";
-		this.TextboxAccountName.AcceptsTab = false;
-		this.table2.Add (this.TextboxAccountName);
-		global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.table2 [this.TextboxAccountName]));
-		w11.TopAttach = ((uint)(1));
-		w11.BottomAttach = ((uint)(2));
-		w11.LeftAttach = ((uint)(1));
-		w11.RightAttach = ((uint)(2));
-		w11.XOptions = ((global::Gtk.AttachOptions)(4));
-		w11.YOptions = ((global::Gtk.AttachOptions)(4));
-		// Container child table2.Gtk.Table+TableChild
-		this.TextboxPassword = new global::Gtk.TextView ();
-		this.TextboxPassword.WidthRequest = 300;
-		this.TextboxPassword.HeightRequest = 25;
-		this.TextboxPassword.CanFocus = true;
-		this.TextboxPassword.Name = "TextboxPassword";
-		this.TextboxPassword.AcceptsTab = false;
-		this.table2.Add (this.TextboxPassword);
-		global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.table2 [this.TextboxPassword]));
-		w12.TopAttach = ((uint)(2));
-		w12.BottomAttach = ((uint)(3));
+		global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.table2 [this.ProviderCombobox]));
 		w12.LeftAttach = ((uint)(1));
 		w12.RightAttach = ((uint)(2));
 		w12.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -220,6 +220,7 @@ public partial class MainWindow
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.ButtonCancel = new global::Gtk.Button ();
 		this.ButtonCancel.WidthRequest = 100;
+		this.ButtonCancel.Sensitive = false;
 		this.ButtonCancel.CanFocus = true;
 		this.ButtonCancel.Name = "ButtonCancel";
 		this.ButtonCancel.UseUnderline = true;
@@ -233,6 +234,7 @@ public partial class MainWindow
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.ButtonSave = new global::Gtk.Button ();
 		this.ButtonSave.WidthRequest = 100;
+		this.ButtonSave.Sensitive = false;
 		this.ButtonSave.CanFocus = true;
 		this.ButtonSave.Name = "ButtonSave";
 		this.ButtonSave.UseUnderline = true;
@@ -272,5 +274,10 @@ public partial class MainWindow
 		this.newAction.Activated += new global::System.EventHandler (this.AddProvider);
 		this.dialogInfoAction.Activated += new global::System.EventHandler (this.OnAbout);
 		this.quitAction.Activated += new global::System.EventHandler (this.ApplicationQuit);
+		this.EntryPassword.Changed += new global::System.EventHandler (this.EnableSaveAndCancel);
+		this.EntryAccountName.Changed += new global::System.EventHandler (this.EnableSaveAndCancel);
+		this.CheckbuttonShowPassword.Toggled += new global::System.EventHandler (this.ShowPassword);
+		this.ButtonCancel.Clicked += new global::System.EventHandler (this.ResetAccount);
+		this.ButtonSave.Clicked += new global::System.EventHandler (this.SaveAccount);
 	}
 }
