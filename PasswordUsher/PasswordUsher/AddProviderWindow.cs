@@ -1,20 +1,21 @@
 using System;
-using PasswordUsher.Core.Data;
 using PasswordUsher.Domain.Entities;
 using Gtk;
+using PasswordUsher.Service.Contracts;
+using PasswordUsher.Service.Impl;
 
 namespace PasswordUsher
 {
 	public partial class AddProviderWindow : Gtk.Window
 	{
-		ProviderDataAccess providerData;
+		IProviderService providerService;
 		public event MainWindow.ProviderAddedDelegate ProviderAddedEvent;
 						
-		public AddProviderWindow (MainWindow.ProviderAddedDelegate providerAddedEvent) : base(Gtk.WindowType.Toplevel)
+		public AddProviderWindow (MainWindow.ProviderAddedDelegate providerAddedEvent, IProviderService service) : base(Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
 			ProviderAddedEvent = providerAddedEvent;
-			providerData = new ProviderDataAccess();
+			providerService = service;
 		}				
 
 		protected void EnableSave (object sender, System.EventArgs e)
@@ -26,7 +27,7 @@ namespace PasswordUsher
 		{
 		
 			try {
-				providerData.Insert(new Provider{ Name = EntryProvider.Text.Trim() });
+				providerService.AddProvider(new Provider{ Name = EntryProvider.Text.Trim() });
 				if (ProviderAddedEvent!=null) 
 				{
 					ProviderAddedEvent();

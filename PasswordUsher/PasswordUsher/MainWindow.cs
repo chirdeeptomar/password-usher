@@ -3,35 +3,41 @@ using System.Linq;
 using System.Collections.Generic;
 using Gtk;
 using PasswordUsher;
-using PasswordUsher.Core.Data;
 using PasswordUsher.Domain.Entities;
-using PasswordUsher.Core;
+using PasswordUsher.Service.Impl;
+using PasswordUsher.Service.Contracts;
+using Ninject;
 
 public partial class MainWindow: Gtk.Window
 {	
-	IEnumerable<Provider> Providers;	
+	IKernel kernel;
+	IEnumerable<Provider> Providers;
 	ListStore providerListStore;
+	IProviderService providerService;
+	IAccountService accountService;
 	
-	ProviderDataAccess providerData = new ProviderDataAccess ();
-	AccountDataAccess accountData = new AccountDataAccess ();
-	
-	public delegate void ProviderAddedDelegate();
+	public delegate void ProviderAddedDelegate ();
 
 	public event ProviderAddedDelegate ProviderAddedEvent;
 		
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{	
+		kernel = new StandardKernel (new ServiceModule ());
+		
+		providerService = kernel.Get<IProviderService> ();
+		accountService = kernel.Get<IAccountService> ();
+
 		Build ();		
-		Initialise();	
+		Initialise ();	
 		CreateTreeViewUi ();
-		ProviderAddedEvent += new ProviderAddedDelegate(Initialise);
+		ProviderAddedEvent += new ProviderAddedDelegate (Initialise);
 	}
 	
 	#region Initialisation
 
 	public void Initialise ()
 	{				
-		Providers = providerData.GetAll();
+		Providers = providerService.GetProviders ();
 		BindProviderTree ();
 		BindProviderCombobox ();			
 	}
@@ -56,12 +62,11 @@ public partial class MainWindow: Gtk.Window
 
 	public void BindProviderTree ()
 	{	
-		TreeStore accountStore = new TreeStore (typeof (string));
+		TreeStore accountStore = new TreeStore (typeof(string));
 		
-		foreach (var provider in Providers) 
-		{
+		foreach (var provider in Providers) {
 			TreeIter iter = accountStore.AppendValues (provider.Name);	
-			var accounts = accountData.GetByProvider(provider.Id);			
+			var accounts = accountService.GetByProvider (provider.Id);			
 			foreach (var account in accounts) {
 				accountStore.AppendValues (iter, account.Name);
 			}
@@ -74,21 +79,20 @@ public partial class MainWindow: Gtk.Window
 	{		
 		CellRendererText textRenderer = new CellRendererText ();
 
-		providerListStore = new ListStore(typeof(string), typeof(Int64));		
+		providerListStore = new ListStore (typeof(string), typeof(Int64));		
 		ProviderCombobox.Model = providerListStore;
 		
 		//ProviderCombobox.PackStart (textRenderer, false); 
 		ProviderCombobox.AddAttribute (textRenderer, "text", 0);                
 		
 		foreach (var item in Providers) {
-			providerListStore.AppendValues(item.Name, item.Id);
+			providerListStore.AppendValues (item.Name, item.Id);
 		}		
 		
 		TreeIter iter;
-        if (providerListStore.GetIterFirst (out iter))
-        {
-                ProviderCombobox.SetActiveIter (iter);
-        } 
+		if (providerListStore.GetIterFirst (out iter)) {
+			ProviderCombobox.SetActiveIter (iter);
+		} 
 	}
 
 	#endregion
@@ -113,17 +117,17 @@ public partial class MainWindow: Gtk.Window
 
 		dialog.Run ();
 		dialog.Destroy ();
-	}	
+	}
 		
 	protected void AddProvider (object sender, System.EventArgs e)
 	{
-		AddProviderWindow providerWindow = new AddProviderWindow(ProviderAddedEvent);
-		providerWindow.Show();		
-	}	
+		AddProviderWindow providerWindow = new AddProviderWindow(ProviderAddedEvent, providerService);		
+		providerWindow.Show ();		
+	}
 
 	protected void ApplicationQuit (object sender, System.EventArgs e)
 	{
-		Application.Quit();
+		Application.Quit ();
 	}
 	
 	protected void ResetAccount (object sender, System.EventArgs e)
@@ -133,38 +137,37 @@ public partial class MainWindow: Gtk.Window
 
 	protected void ShowPassword (object sender, System.EventArgs e)
 	{
-		EntryPassword.Visibility =  CheckbuttonShowPassword.Active;		
+		EntryPassword.Visibility = CheckbuttonShowPassword.Active;		
 	}
 	
 	protected void EnableSaveAndCancel (object sender, System.EventArgs e)
 	{
 		ButtonSave.Sensitive = EntryAccountName.Text.Length > 0 && EntryPassword.Text.Length > 0;
 		ButtonCancel.Sensitive = EntryAccountName.Text.Length > 0 || EntryPassword.Text.Length > 0;
-	}		
+	}
 
 	protected void SaveAccount (object sender, System.EventArgs e)
 	{
 		try {
 			TreeIter activeIter;
 			Int64 providerId = 0;
-			if (ProviderCombobox.GetActiveIter (out activeIter)) 
-			{
+			if (ProviderCombobox.GetActiveIter (out activeIter)) {
 				providerId = (Int64)providerListStore.GetValue (activeIter, 1);
 			}
 		
 			var account = new Account{ 
-							Name = EntryAccountName.Text.Trim(),
-							Password = EntryPassword.Text.Trim(),
+							Name = EntryAccountName.Text.Trim (),
+							Password = EntryPassword.Text.Trim (),
 							ProviderId = providerId
 							};
 							
-			accountData.Insert(account);
-			ResetAccount(this,null);
-			Initialise();
+			accountService.AddAccount (account);
+			ResetAccount (this, null);
+			Initialise ();
 		} catch (Exception ex) {
 			MessageDialog dialog = new MessageDialog (this, DialogFlags.Modal, MessageType.Error, ButtonsType.Cancel, ex.Message); 				
-				dialog.Run();
-				dialog.Destroy();
+			dialog.Run ();
+			dialog.Destroy ();
 		}		
 	}
 	#endregion
