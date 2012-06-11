@@ -47,6 +47,21 @@ namespace PasswordUsher.Core
 				throw ex;
 			}		
 		}
+		
+		public bool Delete(long id)
+		{
+			try {
+				using (var connection = SqlHelper.GetConnection ()) {			
+					connection.Execute (@"delete from Accounts where Id = @Id;",
+					 new { id = id });							
+				}	
+				return true;
+				
+			} catch (Exception ex) {
+				throw ex;
+			}	
+		}
+		
 		#endregion
 	}
 }

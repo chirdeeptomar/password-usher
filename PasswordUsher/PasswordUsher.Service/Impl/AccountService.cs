@@ -30,6 +30,11 @@ namespace PasswordUsher.Service.Impl
 		{
 			return accountData.Update(entity);
 		}
+
+		public bool DeleteAccount (long id)
+		{
+			return accountData.Delete(id);
+		}
 		#endregion
 	}
 }

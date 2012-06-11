@@ -7,6 +7,7 @@ using PasswordUsher.Domain.Entities;
 using PasswordUsher.Service.Impl;
 using PasswordUsher.Service.Contracts;
 using Ninject;
+using System.Diagnostics;
 
 public partial class MainWindow: Gtk.Window
 {	
@@ -15,6 +16,7 @@ public partial class MainWindow: Gtk.Window
 	ListStore providerListStore;
 	IProviderService providerService;
 	IAccountService accountService;
+	TreeStore accountStore;
 	
 	public delegate void ProviderAddedDelegate ();
 
@@ -31,6 +33,7 @@ public partial class MainWindow: Gtk.Window
 		Initialise ();	
 		CreateTreeViewUi ();
 		ProviderAddedEvent += new ProviderAddedDelegate (Initialise);
+
 	}
 	
 	#region Initialisation
@@ -62,17 +65,18 @@ public partial class MainWindow: Gtk.Window
 
 	public void BindProviderTree ()
 	{	
-		TreeStore accountStore = new TreeStore (typeof(string));
+		accountStore = new TreeStore (typeof(string), typeof(Int64));
 		
 		foreach (var provider in Providers) {
 			TreeIter iter = accountStore.AppendValues (provider.Name);	
 			var accounts = accountService.GetByProvider (provider.Id);			
 			foreach (var account in accounts) {
-				accountStore.AppendValues (iter, account.Name);
+				accountStore.AppendValues (iter, account.Name, account.Id);
 			}
 		}	
 		
 		TreeviewAccounts.Model = accountStore;	
+		TreeviewAccounts.ButtonPressEvent += new ButtonPressEventHandler(OnItemButtonPressed);
 	}
 
 	void BindProviderCombobox ()
@@ -121,7 +125,7 @@ public partial class MainWindow: Gtk.Window
 		
 	protected void AddProvider (object sender, System.EventArgs e)
 	{
-		AddProviderWindow providerWindow = new AddProviderWindow(ProviderAddedEvent, providerService);		
+		AddProviderWindow providerWindow = new AddProviderWindow (ProviderAddedEvent, providerService);		
 		providerWindow.Show ();		
 	}
 
@@ -145,20 +149,25 @@ public partial class MainWindow: Gtk.Window
 		ButtonSave.Sensitive = EntryAccountName.Text.Length > 0 && EntryPassword.Text.Length > 0;
 		ButtonCancel.Sensitive = EntryAccountName.Text.Length > 0 || EntryPassword.Text.Length > 0;
 	}
+	
+	long GetProviderId ()
+	{
+		TreeIter activeIter;
+		Int64 providerId = 0;
+		if (ProviderCombobox.GetActiveIter (out activeIter)) {
+			providerId = (Int64)providerListStore.GetValue (activeIter, 1);
+		}
+		return providerId;
+	}
 
 	protected void SaveAccount (object sender, System.EventArgs e)
 	{
 		try {
-			TreeIter activeIter;
-			Int64 providerId = 0;
-			if (ProviderCombobox.GetActiveIter (out activeIter)) {
-				providerId = (Int64)providerListStore.GetValue (activeIter, 1);
-			}
-		
+			
 			var account = new Account{ 
 							Name = EntryAccountName.Text.Trim (),
 							Password = EntryPassword.Text.Trim (),
-							ProviderId = providerId
+							ProviderId = GetProviderId ()
 							};
 							
 			accountService.AddAccount (account);
@@ -170,5 +179,29 @@ public partial class MainWindow: Gtk.Window
 			dialog.Destroy ();
 		}		
 	}
+	
+	[GLib.ConnectBeforeAttribute]
+	protected void OnItemButtonPressed (object sender, ButtonPressEventArgs e)
+	{
+	        if (e.Event.Button == 3) /* right click */
+	        {
+	                Menu m = new Menu();
+	                MenuItem deleteItem = new MenuItem("Delete this item");
+	                deleteItem.ButtonPressEvent +=  new ButtonPressEventHandler(OnDeleteItemButtonPressed);
+	                m.Add(deleteItem);
+	                m.ShowAll();
+	                m.Popup();
+	        }
+	}                                                               
+
+	protected void OnDeleteItemButtonPressed (object sender, ButtonPressEventArgs e)
+	{
+			TreeIter activeIter;	
+	        TreeviewAccounts.Selection.GetSelected(out activeIter);
+			var accountId = (Int64)accountStore.GetValue (activeIter, 1);
+			accountService.DeleteAccount(accountId);
+			Initialise ();
+	}
+
 	#endregion
 }
