@@ -21,15 +21,10 @@ namespace PasswordUsher.Service.Impl
 			return accountData.GetByProvider(id);			
 		}
 
-		public bool AddAccount (Account entity)
+		public bool SaveAccount (Account entity)
 		{
-			return accountData.Insert(entity);
-		}
-
-		public bool UpdateAccount (Account entity)
-		{
-			return accountData.Update(entity);
-		}
+			return entity.Id == 0 ? accountData.Insert(entity) : accountData.Update(entity);
+		}		
 
 		public bool DeleteAccount (long id)
 		{

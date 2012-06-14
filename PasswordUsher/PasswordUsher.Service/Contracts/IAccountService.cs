@@ -8,10 +8,8 @@ namespace PasswordUsher.Service.Contracts
 	{
 		IEnumerable<Account> GetByProvider(Int64 id);
 		
-		bool AddAccount (Account entity);
-		
-		bool UpdateAccount (Account entity);
-		
+		bool SaveAccount (Account entity);
+				
 		bool DeleteAccount(Int64 id);
 	}
 }

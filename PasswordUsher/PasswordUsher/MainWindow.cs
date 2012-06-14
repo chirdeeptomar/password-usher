@@ -7,7 +7,6 @@ using PasswordUsher.Domain.Entities;
 using PasswordUsher.Service.Impl;
 using PasswordUsher.Service.Contracts;
 using Ninject;
-using System.Diagnostics;
 
 public partial class MainWindow: Gtk.Window
 {	
@@ -80,15 +79,10 @@ public partial class MainWindow: Gtk.Window
 	}
 
 	void BindProviderCombobox ()
-	{		
-		CellRendererText textRenderer = new CellRendererText ();
-
+	{
 		providerListStore = new ListStore (typeof(string), typeof(Int64));		
 		ProviderCombobox.Model = providerListStore;
-		
-		//ProviderCombobox.PackStart (textRenderer, false); 
-		ProviderCombobox.AddAttribute (textRenderer, "text", 0);                
-		
+				
 		foreach (var item in Providers) {
 			providerListStore.AppendValues (item.Name, item.Id);
 		}		
@@ -170,7 +164,7 @@ public partial class MainWindow: Gtk.Window
 							ProviderId = GetProviderId ()
 							};
 							
-			accountService.AddAccount (account);
+			accountService.SaveAccount (account);
 			ResetAccount (this, null);
 			Initialise ();
 		} catch (Exception ex) {
@@ -183,7 +177,7 @@ public partial class MainWindow: Gtk.Window
 	[GLib.ConnectBeforeAttribute]
 	protected void OnItemButtonPressed (object sender, ButtonPressEventArgs e)
 	{
-	        if (e.Event.Button == 3) /* right click */
+	        if (e.Event.Button == 3 && GetSelectedTreeViewItem()!=0) /* right click */
 	        {
 	                Menu m = new Menu();
 	                MenuItem deleteItem = new MenuItem("Delete this item");
@@ -196,12 +190,19 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnDeleteItemButtonPressed (object sender, ButtonPressEventArgs e)
 	{
-			TreeIter activeIter;	
-	        TreeviewAccounts.Selection.GetSelected(out activeIter);
-			var accountId = (Int64)accountStore.GetValue (activeIter, 1);
+			var accountId = GetSelectedTreeViewItem ();
 			accountService.DeleteAccount(accountId);
 			Initialise ();
 	}
 
+
+	long GetSelectedTreeViewItem ()
+	{
+		TreeIter activeIter;	
+		      TreeviewAccounts.Selection.GetSelected(out activeIter);
+		var accountId = (Int64)accountStore.GetValue (activeIter, 1);
+		return accountId;
+	}
+	
 	#endregion
 }
