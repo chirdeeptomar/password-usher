@@ -30,6 +30,13 @@ namespace PasswordUsher.Service.Impl
 		{
 			return accountData.Delete(id);
 		}
+
+		public Account Get (long id)
+		{
+			var account = accountData.Get(id);
+			return account;
+		}
+
 		#endregion
 	}
 }

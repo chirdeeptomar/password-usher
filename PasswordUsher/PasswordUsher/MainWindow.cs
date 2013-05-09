@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using Gtk;
 using PasswordUsher;
@@ -75,7 +74,7 @@ public partial class MainWindow: Gtk.Window
 		}	
 		
 		TreeviewAccounts.Model = accountStore;	
-		TreeviewAccounts.ButtonPressEvent += new ButtonPressEventHandler(OnItemButtonPressed);
+		TreeviewAccounts.ButtonPressEvent += new ButtonPressEventHandler (OnItemButtonPressed);
 	}
 
 	void BindProviderCombobox ()
@@ -177,29 +176,38 @@ public partial class MainWindow: Gtk.Window
 	[GLib.ConnectBeforeAttribute]
 	protected void OnItemButtonPressed (object sender, ButtonPressEventArgs e)
 	{
-	        if (e.Event.Button == 3 && GetSelectedTreeViewItem()!=0) /* right click */
-	        {
-	                Menu m = new Menu();
-	                MenuItem deleteItem = new MenuItem("Delete this item");
-	                deleteItem.ButtonPressEvent +=  new ButtonPressEventHandler(OnDeleteItemButtonPressed);
-	                m.Add(deleteItem);
-	                m.ShowAll();
-	                m.Popup();
-	        }
-	}                                                               
+		if (e.Event.Button == 3 && GetSelectedTreeViewItem () != 0) { /* right click */
+			Menu m = new Menu ();
+			MenuItem deleteItem = new MenuItem ("Delete");
+			MenuItem showItem = new MenuItem ("Show");
+			deleteItem.ButtonPressEvent += new ButtonPressEventHandler (OnDeleteItemButtonPressed);
+			showItem.ButtonPressEvent += new ButtonPressEventHandler (OnShowItemButtonPressed);
+			m.Add (showItem);
+			m.Add (deleteItem);
+			m.ShowAll ();
+			m.Popup ();
+		}
+	}
 
 	protected void OnDeleteItemButtonPressed (object sender, ButtonPressEventArgs e)
 	{
-			var accountId = GetSelectedTreeViewItem ();
-			accountService.DeleteAccount(accountId);
-			Initialise ();
+		var accountId = GetSelectedTreeViewItem ();
+		accountService.DeleteAccount (accountId);
+		Initialise ();
 	}
 
+	void OnShowItemButtonPressed (object o, ButtonPressEventArgs args)
+	{
+		var accountId = GetSelectedTreeViewItem ();
+		var account = accountService.Get (accountId);
+		EntryAccountName.Text = account.Name;
+		EntryPassword.Text = account.Password;
+	}
 
 	long GetSelectedTreeViewItem ()
 	{
 		TreeIter activeIter;	
-		      TreeviewAccounts.Selection.GetSelected(out activeIter);
+		TreeviewAccounts.Selection.GetSelected (out activeIter);
 		var accountId = (Int64)accountStore.GetValue (activeIter, 1);
 		return accountId;
 	}

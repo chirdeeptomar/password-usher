@@ -11,6 +11,8 @@ namespace PasswordUsher.Service.Contracts
 		bool SaveAccount (Account entity);
 				
 		bool DeleteAccount(Int64 id);
+
+		Account Get(Int64 id);
 	}
 }
 
